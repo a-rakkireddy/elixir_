@@ -1,0 +1,144 @@
+{
+  "endpoints": {
+    "getProducts": {
+      "description": "Get products from a specific vendor",
+      "method": "GET",
+      "ecom": {
+        "url": "http://localhost:3000/api/v1/marketplace/products?vendor=ecom",
+        "curl": "curl -X GET \"http://localhost:3000/api/v1/marketplace/products?vendor=ecom\""
+      },
+      "voucher": {
+        "url": "http://localhost:3000/api/v1/marketplace/products?vendor=voucher",
+        "curl": "curl -X GET \"http://localhost:3000/api/v1/marketplace/products?vendor=voucher\""
+      }
+    },
+    "validateInventory": {
+      "description": "Validate inventory items",
+      "method": "POST",
+      "ecom": {
+        "url": "http://localhost:3000/api/v1/marketplace/validate-inventory",
+        "payload": {
+          "vendor": "ecom",
+          "items": [
+            {
+              "sku": "340679",
+              "quantity": 2
+            },
+            {
+              "sku": "340680",
+              "quantity": 1
+            }
+          ]
+        },
+        "curl": "curl -X POST \"http://localhost:3000/api/v1/marketplace/validate-inventory\" -H \"Content-Type: application/json\" -d '{\"vendor\":\"ecom\",\"items\":[{\"sku\":\"340679\",\"quantity\":2},{\"sku\":\"340680\",\"quantity\":1}]}'"
+      },
+      "voucher": {
+        "url": "http://localhost:3000/api/v1/marketplace/validate-inventory",
+        "payload": {
+          "vendor": "voucher",
+          "items": [
+            {
+              "sku": "Bata4xfRrUnT46Uv4iol",
+              "quantity": 1
+            },
+            {
+              "sku": "Baskin_RobinshStD6pXnAIEG2wi2",
+              "quantity": 2
+            }
+          ]
+        },
+        "curl": "curl -X POST \"http://localhost:3000/api/v1/marketplace/validate-inventory\" -H \"Content-Type: application/json\" -d '{\"vendor\":\"voucher\",\"items\":[{\"sku\":\"Bata4xfRrUnT46Uv4iol\",\"quantity\":1},{\"sku\":\"Baskin_RobinshStD6pXnAIEG2wi2\",\"quantity\":2}]}'"
+      }
+    },
+    "placeOrder": {
+      "description": "Place an order",
+      "method": "POST",
+      "ecom": {
+        "url": "http://localhost:3000/api/v1/marketplace/order",
+        "payload": {
+          "vendor": "ecom",
+          "orderData": {
+            "items": [
+              {
+                "sku": "340679",
+                "quantity": 2
+              },
+              {
+                "sku": "340680",
+                "quantity": 1
+              }
+            ],
+            "transactionId": "txn_123456789"
+          },
+          "address": {
+            "street": "123 Main Street",
+            "city": "Mumbai",
+            "state": "Maharashtra",
+            "pincode": "400001",
+            "latitude": 19.0760,
+            "longitude": 72.8777
+          }
+        },
+        "curl": "curl -X POST \"http://localhost:3000/api/v1/marketplace/order\" -H \"Content-Type: application/json\" -d '{\"vendor\":\"ecom\",\"orderData\":{\"items\":[{\"sku\":\"340679\",\"quantity\":2},{\"sku\":\"340680\",\"quantity\":1}],\"transactionId\":\"txn_123456789\"},\"address\":{\"street\":\"123 Main Street\",\"city\":\"Mumbai\",\"state\":\"Maharashtra\",\"pincode\":\"400001\",\"latitude\":19.0760,\"longitude\":72.8777}}'"
+      },
+      "voucher": {
+        "url": "http://localhost:3000/api/v1/marketplace/order",
+        "payload": {
+          "vendor": "voucher",
+          "orderData": {
+            "items": [
+              {
+                "sku": "Bata4xfRrUnT46Uv4iol",
+                "quantity": 1
+              },
+              {
+                "sku": "Baskin_RobinshStD6pXnAIEG2wi2",
+                "quantity": 2
+              }
+            ],
+            "customerInfo": {
+              "name": "John Doe",
+              "email": "john.doe@example.com",
+              "phone": "9876543210"
+            }
+          }
+        },
+        "curl": "curl -X POST \"http://localhost:3000/api/v1/marketplace/order\" -H \"Content-Type: application/json\" -d '{\"vendor\":\"voucher\",\"orderData\":{\"items\":[{\"sku\":\"Bata4xfRrUnT46Uv4iol\",\"quantity\":1},{\"sku\":\"Baskin_RobinshStD6pXnAIEG2wi2\",\"quantity\":2}],\"customerInfo\":{\"name\":\"John Doe\",\"email\":\"john.doe@example.com\",\"phone\":\"9876543210\"}}}'"
+      }
+    },
+    "trackOrder": {
+      "description": "Track an order",
+      "method": "GET",
+      "note": "Replace ORDER_ID with the actual order ID received from the place order response",
+      "ecom": {
+        "url": "http://localhost:3000/api/v1/marketplace/order/ORDER_ID/track?vendor=ecom",
+        "curl": "curl -X GET \"http://localhost:3000/api/v1/marketplace/order/ORDER_ID/track?vendor=ecom\""
+      },
+      "voucher": {
+        "url": "http://localhost:3000/api/v1/marketplace/order/ORDER_ID/track?vendor=voucher",
+        "curl": "curl -X GET \"http://localhost:3000/api/v1/marketplace/order/ORDER_ID/track?vendor=voucher\""
+      }
+    },
+    "cancelOrder": {
+      "description": "Cancel an order",
+      "method": "POST",
+      "note": "Replace ORDER_ID with the actual order ID received from the place order response",
+      "ecom": {
+        "url": "http://localhost:3000/api/v1/marketplace/order/ORDER_ID/cancel",
+        "payload": {
+          "vendor": "ecom",
+          "reason": "Changed my mind"
+        },
+        "curl": "curl -X POST \"http://localhost:3000/api/v1/marketplace/order/ORDER_ID/cancel\" -H \"Content-Type: application/json\" -d '{\"vendor\":\"ecom\",\"reason\":\"Changed my mind\"}'"
+      },
+      "voucher": {
+        "url": "http://localhost:3000/api/v1/marketplace/order/ORDER_ID/cancel",
+        "payload": {
+          "vendor": "voucher",
+          "reason": "Found a better deal elsewhere"
+        },
+        "curl": "curl -X POST \"http://localhost:3000/api/v1/marketplace/order/ORDER_ID/cancel\" -H \"Content-Type: application/json\" -d '{\"vendor\":\"voucher\",\"reason\":\"Found a better deal elsewhere\"}'"
+      }
+    }
+  }
+}
