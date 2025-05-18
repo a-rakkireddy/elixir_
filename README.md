@@ -6,13 +6,38 @@ A unified API for integrating with multiple marketplace vendors (ecom and vouche
 
 This project implements a backend for a Marketplace API that supports multiple vendors. Each vendor has its own logic for authorization, product search, and order placement, but the client application experiences a unified interface regardless of the vendor.
 
-## Features
+## Key Features
 
 - Vendor-based product search
 - Inventory validation
 - Order placement with vendor-specific logic
 - Order tracking and cancellation
 - Address serviceability check
+- API authentication with JWT
+- Real Ecom API integration (implemented in dev branch)
+
+## Development Progress
+
+The project is being developed in phases:
+
+1. **Phase 1 (Complete)**: Core API structure with mock data implementations
+   - Unified vendor interface
+   - Mock implementations for both vendors
+   - All API endpoints working with dummy data
+
+2. **Phase 2 (In Progress - Dev Branch)**: Real API Integration
+   - JWT token authentication integration with Ecom API
+   - Real API calls for order confirmation
+   - Real API calls for order tracking
+   - Real API calls for order cancellation 
+   - City serviceability validation
+
+3. **Phase 3 (Planned)**: Full API Integration
+   - Complete integration with all vendor APIs
+   - Comprehensive error handling
+   - Caching and performance optimizations
+
+  Couldn't do this because of the time consraints, but i gave it my best shot.
 
 ## Tech Stack
 
@@ -28,6 +53,7 @@ This project implements a backend for a Marketplace API that supports multiple v
 marketplace-api/
 ├── src/
 │   ├── config/                 # Configuration files
+│   │   └── swagger.ts          # API documentation
 │   ├── controllers/            # API route controllers
 │   │   └── marketplace.controller.ts
 │   ├── interfaces/             # TypeScript interfaces
@@ -39,6 +65,9 @@ marketplace-api/
 │   ├── services/               # Business logic
 │   │   ├── ecom.service.ts     # Ecom vendor implementation
 │   │   └── voucher.service.ts  # Voucher vendor implementation
+│   ├── mocks/                  # Mock data for development
+│   │   ├── ecom.mock.ts        # Mock implementations for Ecom vendor
+│   │   └── voucher.mock.ts     # Mock implementations for Voucher vendor
 │   ├── utils/                  # Utility functions
 │   │   ├── http.util.ts        # HTTP request utilities
 │   │   ├── encryption.util.ts  # Encryption/decryption for Voucher API
@@ -50,6 +79,36 @@ marketplace-api/
 ├── tsconfig.json
 └── README.md
 ```
+
+## Code Implementation Details
+
+### Vendor Interface
+
+The project defines a common interface that all vendor implementations must follow:
+
+```typescript
+export interface IVendor {
+  authorize(): Promise<string>;
+  getProducts(query: string, filters?: any): Promise<Product[]>;
+  validateInventory(items: InventoryItem[]): Promise<InventoryValidationResult>;
+  placeOrder(orderData: OrderData): Promise<OrderResult>;
+  trackOrder(orderId: string): Promise<OrderTrackingResult>;
+  cancelOrder(orderId: string, reason: string): Promise<OrderCancellationResult>;
+}
+```
+
+### Real API Integration (Dev Branch)
+
+In the dev branch, we've implemented real API integrations for the Ecom vendor:
+
+- **Authentication**: Integrated with `/generate-jwt/:merchant_id` endpoint to get JWT tokens with 15-minute expiry
+- **Order Management**: 
+  - Order confirmation using `/orders/:order_id/confirm`
+  - Order tracking using `/orders/:merchant_order_id/track`
+  - Order cancellation using `/orders/:order_id/cancel`
+- **Location Serviceability**: Implemented real API calls to `/city-serviceable` endpoint
+
+The integration includes proper error handling and fallbacks to mock data when the API calls fail.
 
 ## Getting Started
 
@@ -78,17 +137,24 @@ ECOM_ACCESS_KEY=access_key_123
 
 ### Running the Application
 
-#### Development Mode
+-> npm install
+-> npm run build
+-> npm run dev
+
+U can test the endpoints in swagger, the swagger url appears in the console after running "npm run dev" command.
+
+
+### Branch Management
+
+- **main**: Stable version with mock implementations
+- **dev**: Development branch with real API integrations
+
+To test the real API integration:
 
 ```bash
+git checkout dev
+npm install
 npm run dev
-```
-
-#### Production Mode
-
-```bash
-npm run build
-npm start
 ```
 
 ## API Endpoints
