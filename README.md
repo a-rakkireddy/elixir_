@@ -6,6 +6,16 @@ A unified API for integrating with multiple marketplace vendors (ecom and vouche
 
 This project implements a backend for a Marketplace API that supports multiple vendors. Each vendor has its own logic for authorization, product search, and order placement, but the client application experiences a unified interface regardless of the vendor.
 
+## API Architecture Understanding
+
+As per my understanding, the two vendor APIs serve different purposes in the marketplace ecosystem:
+
+- **Ecom APIs**: These should be used for core e-commerce functionality including product ordering, authorization, order tracking, and cancellation. They handle physical products with delivery requirements and logistics.
+
+- **Voucher APIs**: These should be used as gift card solutions for specific brands and their products that are limited to particular stores. They represent digital vouchers/coupons rather than physical products, focusing on brand-specific redemption options.
+
+This architecture allows the marketplace to offer both physical products (via Ecom) and digital gift cards (via Voucher) through a single unified interface, while maintaining the distinct business logic required for each.
+
 ## Key Features
 
 - Vendor-based product search
